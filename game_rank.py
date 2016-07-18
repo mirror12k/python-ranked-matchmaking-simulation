@@ -7,7 +7,7 @@ import random
 
 
 
-class player(object):
+class Player(object):
 	def __init__(self, skill=None):
 		if skill is None:
 			self.skill = random.randint(0, 100)
@@ -21,7 +21,7 @@ class player(object):
 
 
 
-class playerGame(object):
+class PlayerGame(object):
 	def __init__(self, players=[]):
 		self.players = [ [p, 0] for p in players ]
 	def addPlayer(self, player):
@@ -39,11 +39,11 @@ class playerGame(object):
 
 
 
-game = playerGame([ player() for _ in range(5) ])
+# game = playerGame([ player() for _ in range(5) ])
 
-for _ in range(5):
-	game.playRound()
+# for _ in range(5):
+# 	game.playRound()
 
-print game
-print [ str(p) for p in game.playersByScore() ]
+# print game
+# print [ str(p) for p in game.playersByScore() ]
 
