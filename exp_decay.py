@@ -18,9 +18,10 @@ class ExpPlayer(Player):
 
 
 rounds_in_game = 20
-percent_decay = 5
+percent_decay = 0.95
 
-player_pool_size = 100
+player_pool_size = 1000
+num_games = 100
 
 
 
@@ -29,26 +30,30 @@ player_pool = []
 for _ in range(player_pool_size):
 	player_pool.append(ExpPlayer())
 
+for i in range(num_games):
+	games = [ PlayerGame(player_pool[i*20:i*20+19]) for i in range(player_pool_size / 20) ]
 
-games = [ PlayerGame(player_pool[i*20:i*20+19]) for i in range(player_pool_size / 20) ]
 
+	for i in range(rounds_in_game):
+		for game in games:
+			game.playRound()
 
-for i in range(rounds_in_game):
+	# player_pool = []
+
 	for game in games:
-		game.playRound()
+		players = game.playersByScore()
+		for i in range(len(players)):
+			players[i].gainExp(i)
+		# player_pool = player_pool + players
 
-player_pool = []
+	for p in player_pool:
+		p.decayExp(percent_decay)
+		p.evolveSkill()
 
-for game in games:
-	players = game.playersByScore()
-	for i in range(len(players)):
-		players[i].gainExp(i)
-	player_pool = player_pool + players
+	player_pool = sorted(player_pool, key=lambda p: p.exp)
+	# print [ str(p) for p in player_pool ]
 
-for p in player_pool:
-	p.decayExp(0.05)
+	print measureSkillOrder(player_pool)
 
-sorted(player_pool, key=lambda p: p.exp)
-
-print [ str(p) for p in player_pool ]
+# print [ str(p) for p in player_pool ]
 
